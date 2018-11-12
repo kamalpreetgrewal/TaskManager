@@ -1,17 +1,18 @@
 package com.example.kamalpreetgrewal.taskmanager;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.support.v4.view.LayoutInflaterCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class TaskListFragment extends Fragment {
         mTaskAdapter = new TaskAdapter(tasks);
         mRecyclerView.setAdapter(mTaskAdapter);
 
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
+                DividerItemDecoration.HORIZONTAL);
+        mRecyclerView.addItemDecoration(itemDecoration);
+
         return view;
     }
 
@@ -42,12 +47,17 @@ public class TaskListFragment extends Fragment {
         private Task mTask;
         private TextView mTaskTitle;
         private TextView mTaskDescription;
+        private Button mAddTaskButton;
 
         public TaskHolder(View view) {
             super(view);
             mTaskTitle = (TextView) view.findViewById(R.id.task_title);
             mTaskDescription = (TextView) view.findViewById(R.id.task_desc);
-            view.setOnClickListener(this);
+            mAddTaskButton = (Button) view.findViewById(R.id.add_task_button);
+
+            mAddTaskButton.setOnClickListener(this);
+
+//            view.setOnClickListener(this);
         }
 
         public void bind(Task task) {
@@ -58,7 +68,8 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "Task " + mTask.getTaskId(), Toast.LENGTH_SHORT).show();
+            Intent intent = TaskActivity.newIntent(getActivity(), mTask.getTaskId());
+            startActivity(intent);
         }
     }
 
