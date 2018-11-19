@@ -1,7 +1,5 @@
 package com.example.kamalpreetgrewal.taskmanager;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,7 +42,6 @@ public class TaskFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTask.setTaskName(s.toString());
-                //mTaskName.setText(s.toString());
             }
 
             @Override
@@ -63,7 +60,7 @@ public class TaskFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //mTaskDescription.setText(s.toString());
+                mTask.setTaskDescription(s.toString());
             }
 
             @Override

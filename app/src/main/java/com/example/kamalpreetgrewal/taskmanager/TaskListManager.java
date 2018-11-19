@@ -12,11 +12,6 @@ public class TaskListManager {
 
     private TaskListManager(Context context) {
         mTasks = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            Task task = new Task();
-            task.setTaskName("Task #" + i);
-            mTasks.add(task);
-        }
     }
 
     public static TaskListManager getInstance(Context context) {
@@ -37,5 +32,9 @@ public class TaskListManager {
             }
         }
         return null;
+    }
+
+    public void addTask(Task task) {
+        mTasks.add(task);
     }
 }
