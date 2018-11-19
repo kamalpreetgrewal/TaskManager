@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -169,17 +170,26 @@ public class TaskListFragment extends Fragment {
         private Task mTask;
         private TextView mTaskTitle;
         private TextView mTaskDescription;
+        private CheckBox mTaskCompleted;
 
         public TaskHolder(View view) {
             super(view);
             mTaskTitle = (TextView) view.findViewById(R.id.task_title);
             mTaskDescription = (TextView) view.findViewById(R.id.task_desc);
+            mTaskCompleted = (CheckBox) view.findViewById(R.id.task_completed);
         }
 
         public void bind(Task task) {
             mTask = task;
             mTaskTitle.setText(mTask.getTaskName());
             mTaskDescription.setText(mTask.getTaskDescription());
+            mTaskCompleted.setChecked(mTask.isTaskCompleted());
+
+            if (mTaskCompleted.isChecked()) {
+                mTask.setTaskCompleted(true);
+            } else {
+                mTask.setTaskCompleted(false);
+            }
         }
 
         @Override
