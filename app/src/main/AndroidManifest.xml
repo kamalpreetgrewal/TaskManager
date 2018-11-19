@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kamalpreetgrewal.taskmanager">
+          package="com.example.kamalpreetgrewal.taskmanager">
 
     <application
         android:allowBackup="true"
@@ -9,15 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TaskListActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".FragmentActivity" />
-        <activity android:name=".TaskActivity"></activity>
+        <activity android:name=".TaskListActivity" />
+        <activity android:name=".FragmentActivity"/>
+        <activity android:name=".TaskActivity"/>
     </application>
 
 </manifest>

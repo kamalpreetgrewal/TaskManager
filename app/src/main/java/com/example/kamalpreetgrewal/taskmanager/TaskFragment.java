@@ -80,5 +80,4 @@ public class TaskFragment extends Fragment {
 
         return view;
     }
-
 }

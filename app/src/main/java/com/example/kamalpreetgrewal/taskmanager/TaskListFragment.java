@@ -29,11 +29,14 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mTaskAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private static TextView mDefaultTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mDefaultTextView = (TextView) getActivity().findViewById(R.id.default_textview);
+        mDefaultTextView.setVisibility(View.VISIBLE);
     }
 
     @Nullable
@@ -41,7 +44,6 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-
         mRecyclerView = view.findViewById(R.id.task_list_recyclerview);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -160,6 +162,7 @@ public class TaskListFragment extends Fragment {
                 TaskListManager.getInstance(getActivity()).addTask(task);
                 Intent intent = TaskActivity.newIntent(getActivity(), task.getTaskId());
                 startActivity(intent);
+                mDefaultTextView.setVisibility(View.INVISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
