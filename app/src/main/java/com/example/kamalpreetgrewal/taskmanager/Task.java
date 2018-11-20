@@ -2,6 +2,10 @@ package com.example.kamalpreetgrewal.taskmanager;
 
 import java.util.UUID;
 
+/**
+ * This is the model class for task with setters and getters for each of
+ * the task attributes.
+ */
 public class Task {
     private String mTaskName;
     private String mTaskDescription;

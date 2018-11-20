@@ -5,6 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * This is the abstract class for adding fragments to an activity. The code
+ * that defines FragmentManager and Fragment is same, hence this has been made
+ * generic via this abstract class. createFragment() method defines a new fragment
+ * and adds it to the hosting activity.
+ */
 public abstract class FragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();

@@ -14,6 +14,11 @@ import android.widget.EditText;
 
 import java.util.UUID;
 
+/**
+ * This fragment gets the information of a task like its name, description and completion
+ * status and then this information is used to populate the list item in recyclerview with the
+ * information filled in here.
+ */
 public class TaskFragment extends Fragment {
     private Task mTask;
     private EditText mTaskName;
@@ -23,6 +28,7 @@ public class TaskFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get the ID generated and assign it to the new task being created.
         UUID taskId = (UUID) getActivity().getIntent().getSerializableExtra(TaskActivity.EXTRA_TASK_ID);
         mTask = TaskListManager.getInstance(getActivity()).getTask(taskId);
     }
@@ -39,6 +45,7 @@ public class TaskFragment extends Fragment {
 
             }
 
+            // Once the changes are done, assign the input text to the new task name attribute.
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTask.setTaskName(s.toString());
@@ -58,6 +65,7 @@ public class TaskFragment extends Fragment {
 
             }
 
+            // Once the changes are done, assign the information filled to description attribute.
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTask.setTaskDescription(s.toString());

@@ -25,6 +25,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * This fragment is the soul of this application.
+ */
 public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mTaskAdapter;
@@ -34,7 +37,15 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Tell here that menu options are to be considered for performing actions.
         setHasOptionsMenu(true);
+
+        /**
+         * Since there are no tasks in the beginning i.e. for the first time the application is
+         * run, the user is presented with a suitable message telling what should be his/her first
+         * action to proceed to use the application to create tasks.
+         */
         mDefaultTextView = (TextView) getActivity().findViewById(R.id.default_textview);
         mDefaultTextView.setVisibility(View.VISIBLE);
     }
@@ -44,6 +55,8 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+
+        // Define recyclerview, its adapter and holder here.
         mRecyclerView = view.findViewById(R.id.task_list_recyclerview);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -51,19 +64,25 @@ public class TaskListFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This function brings up the swipe gesture from the right most side of the screen to left
+     * for each of the tasks. When the swipe is done midway/partially, nothing happens. If it is
+     * done till the left side, the task is deleted from the list and the recyclerview is notified
+     * of the change and updates the view accordingly.
+     */
     private void setUpItemTouchHelper() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new
                 ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             Drawable background;
-            Drawable xMark;
-            int xMarkMargin;
+            Drawable deleteSign;
+            int deleteSignMargin;
             boolean initiated;
 
             private void init() {
                 background = new ColorDrawable(Color.RED);
-                xMark = ContextCompat.getDrawable(getActivity(), R.drawable.ic_task_delete);
-                xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                deleteSign = ContextCompat.getDrawable(getActivity(), R.drawable.ic_task_delete);
+                deleteSign.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
                 initiated = true;
             }
 
@@ -93,9 +112,7 @@ public class TaskListFragment extends Fragment {
                                     int actionState, boolean isCurrentlyActive) {
                 View itemView = viewHolder.itemView;
 
-                // not sure why, but this method get's called for viewholder that are already swiped away
                 if (viewHolder.getAdapterPosition() == -1) {
-                    // not interested in those
                     return;
                 }
 
@@ -110,16 +127,16 @@ public class TaskListFragment extends Fragment {
 
                 // draw x mark
                 int itemHeight = itemView.getBottom() - itemView.getTop();
-                int intrinsicWidth = xMark.getIntrinsicWidth();
-                int intrinsicHeight = xMark.getIntrinsicWidth();
+                int intrinsicWidth = deleteSign.getIntrinsicWidth();
+                int intrinsicHeight = deleteSign.getIntrinsicWidth();
 
-                int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
-                int xMarkRight = itemView.getRight() - xMarkMargin;
-                int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight)/2;
-                int xMarkBottom = xMarkTop + intrinsicHeight;
-                xMark.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+                int deleteSignLeft = itemView.getRight() - deleteSignMargin - intrinsicWidth;
+                int deleteSignRight = itemView.getRight() - deleteSignMargin;
+                int deleteSignTop = itemView.getTop() + (itemHeight - intrinsicHeight)/2;
+                int deleteSignBottom = deleteSignTop + intrinsicHeight;
+                deleteSign.setBounds(deleteSignLeft, deleteSignTop, deleteSignRight, deleteSignBottom);
 
-                xMark.draw(c);
+                deleteSign.draw(c);
 
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
@@ -135,9 +152,18 @@ public class TaskListFragment extends Fragment {
         updateUI();
     }
 
+    /**
+     * This method updates the recyclerview with the 'tasks' list by passing this list to
+     * the TaskAdapter.
+     */
     private void updateUI() {
         TaskListManager listManager = TaskListManager.getInstance(getActivity());
         List<Task> tasks = listManager.getTasks();
+
+        /**
+         * If the adapter is null, create new one. If it already exists, notify the adapter of
+         * any changes that are made in the data.
+         */
         if (mTaskAdapter == null) {
             mTaskAdapter = new TaskAdapter(tasks);
             mRecyclerView.setAdapter(mTaskAdapter);
@@ -145,6 +171,7 @@ public class TaskListFragment extends Fragment {
             mTaskAdapter.notifyDataSetChanged();
         }
 
+        // This call brings up delete option by swiping in the list from right to left.
         setUpItemTouchHelper();
     }
 
@@ -158,6 +185,11 @@ public class TaskListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.new_task:
+                /**
+                 * When + is clicked in action bar, new task is created and added to list of tasks
+                 * and new fragment opens up where the user has to fill in task information. The
+                 * default text message is set to invisible.
+                 */
                 Task task = new Task();
                 TaskListManager.getInstance(getActivity()).addTask(task);
                 Intent intent = TaskActivity.newIntent(getActivity(), task.getTaskId());
@@ -169,6 +201,10 @@ public class TaskListFragment extends Fragment {
         }
     }
 
+    /**
+     * This class creates a container for an item in the task list. How every task will appear
+     * in the list is defined by the values fetched and assigned here.
+     */
     private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Task mTask;
         private TextView mTaskTitle;
@@ -200,6 +236,11 @@ public class TaskListFragment extends Fragment {
         }
     }
 
+    /**
+     * This class gets the data from the controller class TaskListManager and attaches it to
+     * the recyclerview. The TaskHolder for each class is created here. If the user swipes from
+     * right to left, it is deleted via the call in remove function of this class.
+     */
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
         private List<Task> mTasks;
 
